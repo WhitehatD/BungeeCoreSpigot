@@ -1,5 +1,42 @@
 redis-host: "127.0.0.1:6379"
 
-preferences-inventory:
+prefs-inventory:
   size: 27
   name: "&c&lPreferences"
+  social-prefs:
+    item:
+      slot: 10
+      type: STICK
+      name: "&cSocial preferences"
+      lore:
+        - "&7Click to open the social"
+        - "&7preferences menu"
+    size: 27
+    name: "&c&lSocial Preferences"
+    toggle-item:
+      disabled:
+        name: "&7Toggle &c&l%type% &aon"
+        type: GRAY_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+      enabled:
+        name: "&7Toggle &c&l%type% &aoff"
+        type: GREEN_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+    items:
+      visibility:
+        slot: 2
+
+  gameplay-prefs:
+    item:
+      slot: 16
+      type: REDSTONE
+      name: "&cGameplay preferences"
+      lore:
+        - "&7Click to open the gameplay"
+        - "&7preferences menu"
+    size: 27
+    name: "&c&lGameplay Preferences"
