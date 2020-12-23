@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,8 @@ public abstract class Gui {
     public abstract void onClose(Player player);
 
     public void openGui(Player player) {
-        player.closeInventory();
+        if(player.getOpenInventory() instanceof PlayerInventory)
+            player.closeInventory();
         clearGui();
         setupGui(player);
         player.openInventory(inventory);

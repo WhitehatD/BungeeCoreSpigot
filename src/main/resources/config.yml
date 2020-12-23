@@ -1,4 +1,14 @@
 redis-host: "127.0.0.1:6379"
+servername: "lobby"
+
+messages:
+  pref-updated: "&7Successfully toggled &c%type% &7to %toggled%"
+  toggled:
+    enabled: "&aenabled"
+    disabled: "&cdisabled"
+  hidden-players-join: "&7Players have been hidden."
+
+
 
 prefs-inventory:
   size: 27
@@ -21,14 +31,22 @@ prefs-inventory:
           - "&7Click to toggle"
           - "&7this setting."
       enabled:
-        name: "&7Toggle &c&l%type% &aoff"
+        name: "&7Toggle &c&l%type% &coff"
         type: GREEN_DYE
         lore:
           - "&7Click to toggle"
           - "&7this setting."
     items:
       visibility:
-        slot: 2
+        slot: 11
+      toggle_chat:
+        slot: 12
+      friends_requests:
+        slot: 13
+      private_messages:
+        slot: 14
+      tips:
+        slot: 15
 
   gameplay-prefs:
     item:
@@ -40,3 +58,23 @@ prefs-inventory:
         - "&7preferences menu"
     size: 27
     name: "&c&lGameplay Preferences"
+    toggle-item:
+      disabled:
+        name: "&7Toggle &c&l%type% &aon"
+        type: GRAY_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+      enabled:
+        name: "&7Toggle &c&l%type% &coff"
+        type: GREEN_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+    items:
+      particles:
+        slot: 11
+      sound:
+        slot: 12
+      stacker:
+        slot: 13

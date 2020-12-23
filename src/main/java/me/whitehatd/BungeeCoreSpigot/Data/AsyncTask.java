@@ -1,4 +1,4 @@
-package me.whitehatd.BungeeCoreSpigot.Utilities;
+package me.whitehatd.BungeeCoreSpigot.Data;
 
 import me.whitehatd.BungeeCoreSpigot.BCS;
 

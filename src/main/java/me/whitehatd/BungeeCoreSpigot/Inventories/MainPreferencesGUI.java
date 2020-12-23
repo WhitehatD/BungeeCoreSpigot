@@ -1,8 +1,8 @@
 package me.whitehatd.BungeeCoreSpigot.Inventories;
 
 import me.whitehatd.BungeeCoreSpigot.GuiUtils.Gui;
-import me.whitehatd.BungeeCoreSpigot.Utilities.ItemBuilder;
-import me.whitehatd.BungeeCoreSpigot.Utilities.ConfigUtil;
+import me.whitehatd.BungeeCoreSpigot.Data.ItemBuilder;
+import me.whitehatd.BungeeCoreSpigot.Utilities.Config.ConfigUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

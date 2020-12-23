@@ -1,4 +1,7 @@
-package me.whitehatd.BungeeCoreSpigot.Utilities;
+package me.whitehatd.BungeeCoreSpigot.Utilities.Config;
+
+import me.whitehatd.BungeeCoreSpigot.Utilities.ChatUtil;
+import me.whitehatd.BungeeCoreSpigot.Utilities.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,16 +12,12 @@ public class Utils {
         return BCS.config.get();
     }
 
-    public static void execAsync(Runnable runnable){
-        Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(BCS.getInstance(), runnable, 5L);
-    }
-
     public static void execSync(Runnable runnable){
         Bukkit.getServer().getScheduler().runTask(BCS.getInstance(), runnable);
     }
 
     public static String firstUpper(String str){
-        return String.valueOf(str.charAt(0)).toUpperCase() + str.substring(1);
+        return String.valueOf(str.charAt(0)).toUpperCase() + str.substring(1).toLowerCase();
     }
 
 }

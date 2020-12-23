@@ -1,4 +1,4 @@
-package me.whitehatd.BungeeCoreSpigot.Utilities;
+package me.whitehatd.BungeeCoreSpigot.Data;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

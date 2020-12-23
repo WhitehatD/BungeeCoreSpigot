@@ -1,4 +1,4 @@
-package me.whitehatd.BungeeCoreSpigot.Utilities;
+package me.whitehatd.BungeeCoreSpigot.Utilities.Config;
 
 import me.whitehatd.BungeeCoreSpigot.BCS;
 import org.bukkit.configuration.file.FileConfiguration;

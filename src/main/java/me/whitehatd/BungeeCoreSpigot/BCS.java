@@ -1,9 +1,13 @@
 package me.whitehatd.BungeeCoreSpigot;
 
+import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
+import me.whitehatd.BungeeCoreSpigot.Events.EventManager;
 import me.whitehatd.BungeeCoreSpigot.GuiUtils.GuiListener;
 import me.whitehatd.BungeeCoreSpigot.Redis.RedisListener;
 import me.whitehatd.BungeeCoreSpigot.Utilities.*;
+import me.whitehatd.BungeeCoreSpigot.Utilities.Config.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -31,6 +35,9 @@ public class BCS extends JavaPlugin {
         jedis = jedisPool.getResource();
         new AsyncTask(() -> jedisSubscriber.subscribe(new RedisListener(), "queue_preferences"));
 
+        EventManager eventManager = new EventManager();
+        for(Listener listener : eventManager.listeners)
+            Bukkit.getPluginManager().registerEvents(listener, instance);
         Bukkit.getPluginManager().registerEvents(new GuiListener(), instance);
 
         Bukkit.getConsoleSender().sendMessage(ChatUtil.c("#21cf2aBungeeCoreSpigot enabled!"));
