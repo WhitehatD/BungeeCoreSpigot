@@ -1,5 +1,7 @@
 package me.whitehatd.BungeeCoreSpigot;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Events.EventManager;
 import me.whitehatd.BungeeCoreSpigot.GuiUtils.GuiListener;
@@ -11,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.ArrayList;
 
@@ -21,6 +24,7 @@ public class BCS extends JavaPlugin {
     public static JedisPool jedisPool;
     public static Jedis jedisSubscriber, jedis;
     public static ArrayList<Thread> asyncThreads = new ArrayList<>();
+    public static ProtocolManager protocolManager;
 
 
     public void onEnable(){
@@ -29,11 +33,18 @@ public class BCS extends JavaPlugin {
         config = new Config("config.yml");
         config.saveDefault();
 
-        jedisPool = new JedisPool(Utils.getConfig().getString("redis-host").split(":")[0],
+        JedisPoolConfig pConfig = new JedisPoolConfig();
+        pConfig.setTestOnBorrow(true);
+        pConfig.setTestOnBorrow(true);
+        jedisPool = new JedisPool(pConfig, Utils.getConfig().getString("redis-host").split(":")[0],
                 Integer.parseInt(Utils.getConfig().getString("redis-host").split(":")[1]));
+
         jedisSubscriber = jedisPool.getResource();
         jedis = jedisPool.getResource();
         new AsyncTask(() -> jedisSubscriber.subscribe(new RedisListener(), "queue_preferences"));
+
+        protocolManager = ProtocolLibrary.getProtocolManager();
+        Utils.registerPacketListeners();
 
         EventManager eventManager = new EventManager();
         for(Listener listener : eventManager.listeners)

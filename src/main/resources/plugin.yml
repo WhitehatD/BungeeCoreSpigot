@@ -1,5 +1,6 @@
 main: me.whitehatd.BungeeCoreSpigot.BCS
 version: 1.0
 author: WhitehatD
+depend: [ProtocolLib]
 name: BungeeCoreSpigot
 api-version: 1.16
