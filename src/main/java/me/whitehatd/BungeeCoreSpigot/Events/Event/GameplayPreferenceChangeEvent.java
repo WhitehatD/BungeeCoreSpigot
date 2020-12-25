@@ -1,8 +1,7 @@
 package me.whitehatd.BungeeCoreSpigot.Events.Event;
 
-import me.whitehatd.BungeeCoreSpigot.Data.JedisPlayer;
+import me.whitehatd.BungeeCoreSpigot.Data.JedisPlayer.JedisPlayer;
 import me.whitehatd.BungeeCoreSpigot.Data.Preferences.GameplayPreference;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

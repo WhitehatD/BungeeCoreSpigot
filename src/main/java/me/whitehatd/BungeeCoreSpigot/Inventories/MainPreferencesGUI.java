@@ -1,6 +1,6 @@
 package me.whitehatd.BungeeCoreSpigot.Inventories;
 
-import me.whitehatd.BungeeCoreSpigot.GuiUtils.Gui;
+import me.whitehatd.BungeeCoreSpigot.Data.GuiUtils.Gui;
 import me.whitehatd.BungeeCoreSpigot.Data.ItemBuilder;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Config.ConfigUtil;
 import org.bukkit.Material;

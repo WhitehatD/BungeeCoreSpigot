@@ -1,6 +1,7 @@
 package me.whitehatd.BungeeCoreSpigot.Events.Listener;
 
 import me.whitehatd.BungeeCoreSpigot.BCS;
+import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Data.Preferences.SocialPreference;
 import me.whitehatd.BungeeCoreSpigot.Events.Event.GameplayPreferenceChangeEvent;
 import me.whitehatd.BungeeCoreSpigot.Events.Event.SocialPreferenceChangeEvent;
@@ -28,6 +29,10 @@ public class PreferenceUpdateEvent implements Listener {
                     for(Player online : Bukkit.getOnlinePlayers())
                         player.hidePlayer(BCS.getInstance(), online);
                 }
+                break;
+            }
+            case TOGGLE_CHAT:{
+                new AsyncTask(()->BCS.jedisPublisher.publish("execute_cmd", player.getName()+"@"+"party chat"));
                 break;
             }
         }

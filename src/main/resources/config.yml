@@ -6,6 +6,9 @@ messages:
   toggled:
     enabled: "&aenabled"
     disabled: "&cdisabled"
+  toggled-chat:
+    enabled: "&6Party chat"
+    disabled: "&6Public chat"
   hidden-players-join: "&7Players have been hidden."
 
 
@@ -32,6 +35,19 @@ prefs-inventory:
           - "&7this setting."
       enabled:
         name: "&7Toggle &c&l%type% &coff"
+        type: GREEN_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+    toggle-item-chat:
+      disabled:
+        name: "&7Toggle to &6&lParty Chat"
+        type: GRAY_DYE
+        lore:
+          - "&7Click to toggle"
+          - "&7this setting."
+      enabled:
+        name: "&7Toggle to &6&lPublic Chat"
         type: GREEN_DYE
         lore:
           - "&7Click to toggle"

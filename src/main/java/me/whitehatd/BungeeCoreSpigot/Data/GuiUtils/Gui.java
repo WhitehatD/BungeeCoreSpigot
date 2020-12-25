@@ -1,4 +1,4 @@
-package me.whitehatd.BungeeCoreSpigot.GuiUtils;
+package me.whitehatd.BungeeCoreSpigot.Data.GuiUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

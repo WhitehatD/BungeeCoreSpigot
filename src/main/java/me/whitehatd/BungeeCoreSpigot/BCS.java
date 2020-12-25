@@ -4,11 +4,12 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Events.EventManager;
-import me.whitehatd.BungeeCoreSpigot.GuiUtils.GuiListener;
+import me.whitehatd.BungeeCoreSpigot.Data.GuiUtils.GuiListener;
 import me.whitehatd.BungeeCoreSpigot.Redis.RedisListener;
 import me.whitehatd.BungeeCoreSpigot.Utilities.*;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Config.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
@@ -22,7 +23,7 @@ public class BCS extends JavaPlugin {
     public static BCS instance = null;
     public static Config config = null;
     public static JedisPool jedisPool;
-    public static Jedis jedisSubscriber, jedis;
+    public static Jedis jedisSubscriber, jedis, jedisPublisher;
     public static ArrayList<Thread> asyncThreads = new ArrayList<>();
     public static ProtocolManager protocolManager;
 
@@ -41,6 +42,8 @@ public class BCS extends JavaPlugin {
 
         jedisSubscriber = jedisPool.getResource();
         jedis = jedisPool.getResource();
+        jedisPublisher = jedisPool.getResource();
+
         new AsyncTask(() -> jedisSubscriber.subscribe(new RedisListener(), "queue_preferences"));
 
         protocolManager = ProtocolLibrary.getProtocolManager();
@@ -62,6 +65,9 @@ public class BCS extends JavaPlugin {
         for(Thread thread : asyncThreads)
             thread.stop();
         jedisPool.destroy();
+        for(Player player : Bukkit.getOnlinePlayers())
+            player.kickPlayer(ChatUtil.c("&cThe server is restarting, please rejoin!"));
     }
+
 
 }

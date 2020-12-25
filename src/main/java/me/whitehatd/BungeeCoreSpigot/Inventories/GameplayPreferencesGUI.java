@@ -1,10 +1,11 @@
 package me.whitehatd.BungeeCoreSpigot.Inventories;
 
+import me.whitehatd.BungeeCoreSpigot.Data.JedisPlayer.JedisPlayerManager;
 import me.whitehatd.BungeeCoreSpigot.Data.Preferences.GameplayPreference;
 import me.whitehatd.BungeeCoreSpigot.Data.ItemBuilder;
-import me.whitehatd.BungeeCoreSpigot.Data.JedisPlayer;
+import me.whitehatd.BungeeCoreSpigot.Data.JedisPlayer.JedisPlayer;
 import me.whitehatd.BungeeCoreSpigot.Events.Event.GameplayPreferenceChangeEvent;
-import me.whitehatd.BungeeCoreSpigot.GuiUtils.Gui;
+import me.whitehatd.BungeeCoreSpigot.Data.GuiUtils.Gui;
 import me.whitehatd.BungeeCoreSpigot.Utilities.ChatUtil;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Config.ConfigUtil;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Utils;
@@ -26,7 +27,8 @@ public class GameplayPreferencesGUI extends Gui {
     public void setupGui(Player p) {
         for(String key : Utils.getConfig().getConfigurationSection(prefix + ".items").getKeys(false)){
             int slot = ConfigUtil.num(prefix + ".items." + key + ".slot");
-            JedisPlayer jedisPlayer = new JedisPlayer(p);
+            JedisPlayer jedisPlayer = JedisPlayerManager.getByPlayer(p);
+            jedisPlayer.refresh();
             GameplayPreference pref = GameplayPreference.valueOf(key.toUpperCase());
             String tog = jedisPlayer.gameplayStatus(pref)?"enabled":"disabled";
             ItemStack item = new ItemBuilder(Material.valueOf(ConfigUtil.str(prefix + ".toggle-item." + tog + ".type")))
