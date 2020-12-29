@@ -23,7 +23,6 @@ public class BCS extends JavaPlugin {
     public static BCS instance = null;
     public static Config config = null;
     public static JedisPool jedisPool;
-    public static Jedis jedisSubscriber, jedis, jedisPublisher;
     public static ArrayList<Thread> asyncThreads = new ArrayList<>();
     public static ProtocolManager protocolManager;
 
@@ -39,12 +38,11 @@ public class BCS extends JavaPlugin {
         pConfig.setTestOnBorrow(true);
         jedisPool = new JedisPool(pConfig, Utils.getConfig().getString("redis-host").split(":")[0],
                 Integer.parseInt(Utils.getConfig().getString("redis-host").split(":")[1]));
-
-        jedisSubscriber = jedisPool.getResource();
-        jedis = jedisPool.getResource();
-        jedisPublisher = jedisPool.getResource();
-
-        new AsyncTask(() -> jedisSubscriber.subscribe(new RedisListener(), "queue_preferences"));
+        new AsyncTask(()-> {
+            try (Jedis jedis = BCS.jedisPool.getResource()) {
+                jedis.subscribe(new RedisListener(), "queue_preferences");
+            }
+        });
 
         protocolManager = ProtocolLibrary.getProtocolManager();
         Utils.registerPacketListeners();

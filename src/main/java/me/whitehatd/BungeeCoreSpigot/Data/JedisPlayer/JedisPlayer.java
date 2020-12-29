@@ -5,6 +5,7 @@ import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Data.Preferences.GameplayPreference;
 import me.whitehatd.BungeeCoreSpigot.Data.Preferences.SocialPreference;
 import org.bukkit.entity.Player;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,9 @@ public class JedisPlayer {
             preferences.put(pref, toggle);
             for(SocialPreference preference : preferences.keySet())
                 rawMap.put(String.valueOf(preference), String.valueOf(preferences.get(preference)));
-            BCS.jedis.hmset(player.getUniqueId().toString()+"@social", rawMap);
+            try(Jedis jedis = BCS.jedisPool.getResource()) {
+                jedis.hmset(player.getUniqueId().toString() + "@social", rawMap);
+            }
         });
     }
 
@@ -70,7 +73,9 @@ public class JedisPlayer {
             preferences.put(pref, toggle);
             for(GameplayPreference preference : preferences.keySet())
                 rawMap.put(String.valueOf(preference), String.valueOf(preferences.get(preference)));
-            BCS.jedis.hmset(player.getUniqueId().toString()+"@gameplay", rawMap);
+            try(Jedis jedis = BCS.jedisPool.getResource()) {
+                jedis.hmset(player.getUniqueId().toString() + "@gameplay", rawMap);
+            }
         });
     }
 
@@ -79,14 +84,18 @@ public class JedisPlayer {
         Callable<Map<SocialPreference, Boolean>> social = () -> {
             Map<SocialPreference, Boolean> preferences =  new HashMap<>();
             Map<String, String> rawMap;
-            rawMap = BCS.jedis.hgetAll(player.getUniqueId().toString()+"@social");
+            try(Jedis jedis = BCS.jedisPool.getResource()) {
+                rawMap = jedis.hgetAll(player.getUniqueId().toString() + "@social");
+            }
             if(rawMap.isEmpty()){
                 Map<String, String> toAdd = new HashMap<>();
                 for(SocialPreference preference : SocialPreference.values()) {
                     toAdd.put(String.valueOf(preference), "false");
                     preferences.put(preference, false);
                 }
-                BCS.jedis.hmset(player.getUniqueId().toString()+"@social", toAdd);
+                try(Jedis jedis = BCS.jedisPool.getResource()) {
+                    jedis.hmset(player.getUniqueId().toString() + "@social", toAdd);
+                }
             } else {
                 rawMap.keySet().forEach(key -> preferences.put(SocialPreference.valueOf(key),
                         Boolean.valueOf(rawMap.get(key))));
@@ -97,14 +106,18 @@ public class JedisPlayer {
         Callable<Map<GameplayPreference, Boolean>> gameplay = () -> {
             Map<GameplayPreference, Boolean> preferences =  new HashMap<>();
             Map<String, String> rawMap;
-            rawMap = BCS.jedis.hgetAll(player.getUniqueId().toString()+"@gameplay");
+            try(Jedis jedis = BCS.jedisPool.getResource()) {
+                rawMap = jedis.hgetAll(player.getUniqueId().toString() + "@gameplay");
+            }
             if(rawMap.isEmpty()){
                 Map<String, String> toAdd = new HashMap<>();
                 for(GameplayPreference preference : GameplayPreference.values()) {
                     toAdd.put(String.valueOf(preference), "false");
                     preferences.put(preference, false);
                 }
-                BCS.jedis.hmset(player.getUniqueId().toString()+"@gameplay", toAdd);
+                try(Jedis jedis = BCS.jedisPool.getResource()) {
+                    jedis.hmset(player.getUniqueId().toString() + "@gameplay", toAdd);
+                }
             } else {
                 rawMap.keySet().forEach(key -> preferences.put(GameplayPreference.valueOf(key),
                         Boolean.valueOf(rawMap.get(key))));
