@@ -7,11 +7,12 @@ import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class PartyUtils {
 
-    public static String[] getAllParties(){
+    public static List<String> getAllParties(){
         Future<String> future;
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<String> part = () -> {
@@ -26,25 +27,34 @@ public class PartyUtils {
         } catch (InterruptedException | ExecutionException interruptedException) {
             interruptedException.printStackTrace();
         }
-        return parties.split("@");
+        return Arrays.asList(parties.split("@"));
     }
 
-    public static ArrayList<String> getLeaders(){
+    public static String hasPartyChat(Player player){
         ArrayList<String> leaders = new ArrayList<>();
-        for(String party : getAllParties()){
-            leaders.add(party.split("!")[0]);
+        String partyChat = "no";
+        String leader, members;
+        if(getAllParties().isEmpty()){
+            return "no";
         }
-        return leaders;
-    }
-
-    public static ArrayList<String> getMembers(){
-        ArrayList<String> members = new ArrayList<>();
         for(String party : getAllParties()){
-            for(String member: party.split("!")[1].substring(0, party.split("!")[1].length()-1).split("\\$")){
-                members.add(member);
+            leader = party.substring(1).split("!")[0].substring(0, party.split("!")[0].indexOf("[")-1);
+            members = party.split("!")[1].substring(0, party.split("!")[1].indexOf(")"));
+            if(members.length()>1) {
+                for (String member : members.split("\\$")) {
+                    String finalMember = member.substring(0, member.indexOf("["));
+                    if (finalMember.equals(player.getName())) {
+                        partyChat = member.substring(member.indexOf("[") + 1, member.indexOf("]"));
+                    }
+                }
+            }
+            if(leader.equals(player.getName())){
+                partyChat = party.substring(1).split("!")[0].substring(
+                        party.split("!")[0].indexOf("["), party.split("!")[0].indexOf("]")-1);
             }
         }
-        return members;
+        return partyChat;
     }
+
 
 }

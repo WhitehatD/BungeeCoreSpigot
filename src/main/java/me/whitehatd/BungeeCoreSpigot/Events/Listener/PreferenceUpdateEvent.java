@@ -1,6 +1,7 @@
 package me.whitehatd.BungeeCoreSpigot.Events.Listener;
 
 import me.whitehatd.BungeeCoreSpigot.BCS;
+import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Events.Event.GameplayPreferenceChangeEvent;
 import me.whitehatd.BungeeCoreSpigot.Events.Event.SocialPreferenceChangeEvent;
 import me.whitehatd.BungeeCoreSpigot.Utilities.PartyUtils;
@@ -9,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import redis.clients.jedis.Jedis;
 
 public class PreferenceUpdateEvent implements Listener {
 
@@ -32,9 +34,13 @@ public class PreferenceUpdateEvent implements Listener {
                 break;
             }
             case TOGGLE_CHAT:{
-                for(String party : PartyUtils.getAllParties()){
-                    player.sendMessage(PartyUtils.getAllParties());
-                    player.sendMessage(PartyUtils.getMembers().get(0));
+                if(PartyUtils.hasPartyChat(player).equals("true")||
+                    PartyUtils.hasPartyChat(player).equals("false")){
+                    new AsyncTask(()->{
+                       try(Jedis jedis = BCS.jedisPool.getResource()){
+                           jedis.publish("execute_cmd", player.getName()+"@"+"party chat");
+                       }
+                    });
                 }
             }
         }

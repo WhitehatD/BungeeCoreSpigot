@@ -3,6 +3,7 @@ servername: "lobby"
 
 messages:
   pref-updated: "&7Successfully toggled &c%type% &7to %toggled%"
+  no-party: "&cYou are not in a party!"
   toggled:
     enabled: "&aenabled"
     disabled: "&cdisabled"

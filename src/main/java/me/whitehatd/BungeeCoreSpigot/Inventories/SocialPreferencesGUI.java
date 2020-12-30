@@ -41,6 +41,12 @@ public class SocialPreferencesGUI extends Gui {
                     .name(ConfigUtil.str(prefix + ".toggle-item-chat." + tog + ".name"))
                     .lore(ConfigUtil.arr(prefix + ".toggle-item-chat." + tog + ".lore")).build();
             addButton(slot, item, player -> {
+                if(PartyUtils.hasPartyChat(player).equals("no")&&pref==SocialPreference.TOGGLE_CHAT) {
+                    Utils.execSync(() -> {
+                        ChatUtil.cs(player, "messages.no-party");
+                    });
+                    return;
+                }
                 jedisPlayer.setSocialPreference(pref , !jedisPlayer.socialStatus(pref));
                 SocialPreferenceChangeEvent s = new SocialPreferenceChangeEvent(jedisPlayer, pref, !jedisPlayer.socialStatus(pref));
                 Bukkit.getPluginManager().callEvent(s);
