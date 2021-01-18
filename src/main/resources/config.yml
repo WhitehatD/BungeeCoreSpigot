@@ -12,7 +12,20 @@ messages:
     disabled: "&6Public chat"
   hidden-players-join: "&7Players have been hidden."
 
-
+main-friends-inventory:
+  size: 27
+  name: "&c&lFriends"
+  friend-req-item:
+    type: CARROT
+    name: "&6View friend requests"
+    lore:
+      - "&7Click to view your"
+      - "&7friend requests."
+    slot: 2
+  friend:
+    name: "&c%player%"
+    lore:
+      - "&7Last online: %online%"
 
 prefs-inventory:
   size: 27

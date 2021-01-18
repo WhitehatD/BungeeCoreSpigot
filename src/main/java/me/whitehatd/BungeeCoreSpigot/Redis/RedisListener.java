@@ -1,5 +1,6 @@
 package me.whitehatd.BungeeCoreSpigot.Redis;
 
+import me.whitehatd.BungeeCoreSpigot.Inventories.FriendsMainGUI;
 import me.whitehatd.BungeeCoreSpigot.Inventories.MainPreferencesGUI;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Config.ConfigUtil;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Utils;
@@ -22,6 +23,20 @@ public class RedisListener extends JedisPubSub {
             Utils.execSync(()-> {
                 try {
                     new MainPreferencesGUI().openGui(future.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        if(channel.equals("queue_f")){
+            if(!message.split("@")[1].equalsIgnoreCase(ConfigUtil.str("servername")))return;
+            Future<Player> future;
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Callable<Player> task = () -> Bukkit.getPlayer(UUID.fromString(message.split("@")[0]));
+            future = service.submit(task);
+            Utils.execSync(()-> {
+                try {
+                    future.get().openInventory(FriendsMainGUI.get(future.get()));
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }

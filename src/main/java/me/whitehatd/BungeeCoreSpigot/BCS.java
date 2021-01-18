@@ -2,6 +2,9 @@ package me.whitehatd.BungeeCoreSpigot;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.samjakob.spigui.SpiGUI;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
 import me.whitehatd.BungeeCoreSpigot.Data.AsyncTask;
 import me.whitehatd.BungeeCoreSpigot.Events.EventManager;
 import me.whitehatd.BungeeCoreSpigot.Data.GuiUtils.GuiListener;
@@ -9,6 +12,7 @@ import me.whitehatd.BungeeCoreSpigot.Redis.RedisListener;
 import me.whitehatd.BungeeCoreSpigot.Utilities.*;
 import me.whitehatd.BungeeCoreSpigot.Utilities.Config.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,11 +29,53 @@ public class BCS extends JavaPlugin {
     public static JedisPool jedisPool;
     public static ArrayList<Thread> asyncThreads = new ArrayList<>();
     public static ProtocolManager protocolManager;
-
+    public static SpiGUI spiGUI;
 
     public void onEnable(){
         instance = this;
+        spiGUI = new SpiGUI(instance);
+        spiGUI.setDefaultPaginationButtonBuilder((type, inventory) -> {
+            switch (type) {
+                case PREV_BUTTON:
+                    if (inventory.getCurrentPage() > 0) return new SGButton(new ItemBuilder(Material.ARROW)
+                            .name("&a&l\u2190 Previous Page")
+                            .lore(
+                                    "&aClick to move back to",
+                                    "&apage " + inventory.getCurrentPage() + ".")
+                            .build()
+                    ).withListener(event -> {
+                        event.setCancelled(true);
+                        inventory.previousPage(event.getWhoClicked());
+                    });
+                    else return null;
 
+                case CURRENT_BUTTON:
+                    return new SGButton(new ItemBuilder(Material.NAME_TAG)
+                            .name("&7&lPage " + (inventory.getCurrentPage() + 1) + " of " + inventory.getMaxPage())
+                            .lore(
+                                    "&7You are currently viewing",
+                                    "&7page " + (inventory.getCurrentPage() + 1) + "."
+                            ).build()
+                    ).withListener(event -> event.setCancelled(true));
+
+                case NEXT_BUTTON:
+                    if (inventory.getCurrentPage() < inventory.getMaxPage() - 1) return new SGButton(new ItemBuilder(Material.ARROW)
+                            .name("&a&lNext Page \u2192")
+                            .lore(
+                                    "&aClick to move forward to",
+                                    "&apage " + (inventory.getCurrentPage() + 2) + "."
+                            ).build()
+                    ).withListener(event -> {
+                        event.setCancelled(true);
+                        inventory.nextPage(event.getWhoClicked());
+                    });
+                    else return null;
+
+                case UNASSIGNED:
+                default:
+                    return null;
+            }
+        });
         config = new Config("config.yml");
         config.saveDefault();
 
@@ -40,7 +86,7 @@ public class BCS extends JavaPlugin {
                 Integer.parseInt(Utils.getConfig().getString("redis-host").split(":")[1]));
         new AsyncTask(()-> {
             try (Jedis jedis = BCS.jedisPool.getResource()) {
-                jedis.subscribe(new RedisListener(), "queue_preferences");
+                jedis.subscribe(new RedisListener(), "queue_preferences", "queue_f");
             }
         });
 
